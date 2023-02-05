@@ -65,7 +65,7 @@ public class Timer : MonoBehaviour
             fillFraction = timerValue/divider;
         }
 
-        Debug.Log(isAnsweringQuestion + ":" +timerValue + ":" + fillFraction);
+        //Debug.Log(isAnsweringQuestion + ":" +timerValue + ":" + fillFraction);
     }
 
 
