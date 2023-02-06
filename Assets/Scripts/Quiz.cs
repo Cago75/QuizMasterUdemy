@@ -10,27 +10,38 @@ public class Quiz : MonoBehaviour
                      QuestionSO         currentQuestion;
     [SerializeField] TextMeshProUGUI    questionText;
     [SerializeField] List<QuestionSO>   questions = new List<QuestionSO>();
+    
     [Header("Answers")]
     [SerializeField] GameObject[]       answerButtons;     
                      int                correctAnswerIndex;
                      bool               hasAnsweredEarly;
+   
     [Header("Button Colors")]
     [SerializeField] Sprite             defaultAnswerSprite;
     [SerializeField] Sprite             correctAnswerSprite;  
     [SerializeField] Sprite             incorrectAnswerSprite; 
+    
     [Header("Timer")]
     [SerializeField] Image              timerImage;
     Timer timer;  
+    
     [Header("Scoring")]
     [SerializeField] TextMeshProUGUI scoreText;
     ScoreKeeper scoreKeeper;
+
+    [Header("ProgressBar")]
+    [SerializeField] Slider progressBar;
+
+    public bool isComplete;
  
-    void Start()
+    void Awake()
     {
         //DisplayQuestion();
-        timer = FindObjectOfType<Timer>(); 
-        scoreKeeper = FindObjectOfType<ScoreKeeper>();  
-        scoreText.text =   "Score: 0%";  
+        timer                   = FindObjectOfType<Timer>(); 
+        scoreKeeper             = FindObjectOfType<ScoreKeeper>();  
+        scoreText.text          = "Score: 0%";  
+        progressBar.maxValue    = questions.Count;
+        progressBar.value       = 0;
     }
 
     void Update()
@@ -38,6 +49,11 @@ public class Quiz : MonoBehaviour
         timerImage.fillAmount = timer.fillFraction;
         if(timer.loadNextQuestion)
         {
+            if(progressBar.value == progressBar.maxValue)
+            {
+                isComplete = true;
+                return;
+            }
             hasAnsweredEarly        = false;
             timer.loadNextQuestion  = false;
             GetNextQuestion();
@@ -59,6 +75,7 @@ public class Quiz : MonoBehaviour
             setDefaultButtonSprties();
             GetRandomQuestion();
             DisplayQuestion();
+            progressBar.value++;
             scoreKeeper.IncrementQuestionsCompleted();
         }
     }
@@ -91,6 +108,8 @@ public class Quiz : MonoBehaviour
             SetButtonState(false);
             timer.cancelTimer(); 
             scoreText.text = "Score: " + scoreKeeper.CalculateScore() + "%";
+
+
         }
     }
     //Highlight correct answer and display correct answer

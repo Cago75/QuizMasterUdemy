@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: Question 5
   m_EditorClassIdentifier: 
   question: What is the answer to life, the universe and everything?
+  answers:
+  - Games
+  - Love
+  - 42
+  - Hope
+  correctAnswerIndex: 2
